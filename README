@@ -1,11 +1,7 @@
-Here the short sample how-to use Google C++ Test Framework in cmake project
-
-1. Google test will be downloaded from svn and build with you project
-
 How to use:
 
-1. git clone https://github.com/snikulov/google-test-examples.git
-2. cd google-test-examples
+1. git clone https://github.com/emmanouilmatsis/libdht.git
+2. cd libdht
 3. mkdir build
 4. cd build
 5. cmake ..
