@@ -6,9 +6,12 @@ set(libdht_VERSION_MAJOR 0)
 set(libdht_VERSION_MINOR 1)
 set(libdht_VERSION_PATCH 0)
 
-enable_testing()
-
 set(CMAKE_CXX_FLAGS "-std=c++14 -Wall")
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+enable_testing()
+include(FindGoogleTest)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 

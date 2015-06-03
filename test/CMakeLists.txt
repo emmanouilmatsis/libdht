@@ -1,5 +1,3 @@
-#add_subdirectory(${PROJECT_SOURCE_DIR}/ext/gtest ${CMAKE_BINARY_DIR}/googletest)
-
 include_directories(${GTEST_INCLUDE_DIRS})
 
 file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*_test.cpp)
