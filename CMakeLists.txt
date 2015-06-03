@@ -8,9 +8,6 @@ set(libdht_VERSION_PATCH 0)
 
 enable_testing()
 
-#find_package(Threads REQUIRED)
-#set(CMAKE_CXX_FLAGS "-std=c++14 -Wall -pthread")
-
 set(CMAKE_CXX_FLAGS "-std=c++14 -Wall")
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
