@@ -1,4 +1,4 @@
-add_subdirectory(${PROJECT_SOURCE_DIR}/ext/gtest ${CMAKE_BINARY_DIR}/googletest)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/ext/gtest ${CMAKE_BINARY_DIR}/googletest)
 
 include_directories(${GTEST_INCLUDE_DIRS})
 
