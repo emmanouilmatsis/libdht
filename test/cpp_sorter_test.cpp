@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "cpp_sorter.h"
+#include "libdht/cpp_sorter.h"
 #include "gtest/gtest.h"
 
 TEST(cpp_sorter_test, null_term_str_sort)
