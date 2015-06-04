@@ -2,7 +2,6 @@ include(ExternalProject)
 
 ExternalProject_Add(gtest
     SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
     INSTALL_COMMAND ""
 )
 
