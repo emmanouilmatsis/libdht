@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "-std=c++14 -Wall")
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 enable_testing()
-include(FindGTest)
+include(FindGMock)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
