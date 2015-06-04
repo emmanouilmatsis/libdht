@@ -1,19 +1,13 @@
 include(ExternalProject)
 
-ExternalProject_Add(googletest
+ExternalProject_Add(gtest
     SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
-    CMAKE_ARGS -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG:PATH=DebugLibs
-               -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=ReleaseLibs
-               -DCMAKE_CXX_FLAGS=${MSVC_COMPILER_DEFS}
-               -Dgtest_force_shared_crt=ON
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
     INSTALL_COMMAND ""
 )
 
-# Specify include dir
-ExternalProject_Get_Property(googletest source_dir)
-set(GTEST_INCLUDE_DIRS ${source_dir}/include)
+ExternalProject_Get_Property(gtest SOURCE_DIR)
+set(GTEST_INCLUDE_DIRS ${SOURCE_DIR}/include)
 
-# Specify MainTest's link libraries
-ExternalProject_Get_Property(googletest binary_dir)
-set(GTEST_LIBS_DIR ${binary_dir})
+ExternalProject_Get_Property(gtest BINARY_DIR)
+set(GTEST_BOTH_LIBRARIES ${BINARY_DIR}/libgtest.a ${BINARY_DIR}/libgtest_main.a)
