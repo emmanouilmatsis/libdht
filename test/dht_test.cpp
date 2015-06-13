@@ -1,7 +1,7 @@
 #include "libdht/dht.hpp"
 #include "gtest/gtest.h"
 
-TEST(DHTTestCase, PrintOneTest)
+TEST(DHTTestCase, DHTTest)
 {
     libdht::DHT dht;
 
