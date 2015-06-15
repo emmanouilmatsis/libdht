@@ -1,6 +1,12 @@
 # Mac OS X
 .DS_Store
 
+# Vim
+*.swp
+
+# Build
+/build
+
 # Compiled Object files
 *.slo
 *.lo

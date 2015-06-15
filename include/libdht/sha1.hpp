@@ -1,25 +1,5 @@
-/*
-   sha1.h - header of
-
-   ============
-   SHA-1 in C++
-   ============
-
-   100% Public Domain.
-
-   Original C Code
-   -- Steve Reid <steve@edmweb.com>
-   Small changes to fit into bglibs
-   -- Bruce Guenter
-   <bruce@untroubled.org>
-   Translation to simpler C++
-   Code
-   -- Volker Grabsch
-   <vog@notjusthosting.com>
- */
-
-#ifndef SHA1_HPP
-#define SHA1_HPP
+#ifndef LIBDHT_SHA1_HPP
+#define LIBDHT_SHA1_HPP
 
 
 #include <iostream>
@@ -63,4 +43,4 @@ namespace libdht
 
 
 
-#endif /* SHA1_HPP */
+#endif /* LIBDHT_SHA1_HPP */
