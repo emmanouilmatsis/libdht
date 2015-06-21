@@ -18,7 +18,7 @@ namespace libdht
     {
         public:
             ID();
-            ID(const std::string &);
+            ID(const std::string&);
 
             ID(ID&&) = default;
             ID& operator=(ID&&) = default;
@@ -26,11 +26,20 @@ namespace libdht
             ID& operator=(const ID&) = default;
             ~ID() = default;
 
-            const std::array<uint8_t, libdht::HASH_LENGTH> data() const;
+            const std::array<uint8_t, libdht::kIDSize> data() const;
+
+            unsigned int prefix(const ID&);
+
+            friend bool operator==(const ID& lhs, const ID& rhs);
+            friend bool operator!=(const ID& lhs, const ID& rhs);
+            friend bool operator<(const ID& lhs, const ID& rhs);
+            friend bool operator>(const ID& lhs, const ID& rhs);
+            friend bool operator<=(const ID& lhs, const ID& rhs);
+            friend bool operator>=(const ID& lhs, const ID& rhs);
             friend std::ostream& operator<<(std::ostream&, const ID&);
 
         private:
-            std::array<uint8_t, libdht::HASH_LENGTH> data_;
+            std::array<uint8_t, libdht::kIDSize> data_;
     };
 
 }
