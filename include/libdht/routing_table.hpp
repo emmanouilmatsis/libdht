@@ -15,7 +15,21 @@ namespace libdht
             RoutingTable& operator=(const RoutingTable&) = default;
             ~RoutingTable() = default;
 
+            std::list<libdht::KBucket>::iterator begin();
+            std::list<libdht::KBucket>::const_iterator begin() const;
+            std::list<libdht::KBucket>::const_iterator cbegin() const;
+            std::list<libdht::KBucket>::iterator end();
+            std::list<libdht::KBucket>::const_iterator end() const;
+            std::list<libdht::KBucket>::const_iterator cend() const;
+
+            // return std::find(data_.begin(), data_.end(), [](){});
+            bool add(); // if contains own id or kbucket.depth % b then split bucket and kbucket.add() else kbucket.add()
+            std::list<libdht::KBucket>::iterator find(const Node &);
+            std::list<libdht::KBucket>::const_iterator find(const Node &) const;
+            bool split(std::list<libdht::KBucket>::iterator &kbucket); // const_iterator
+
         private:
+            std::list<KBucket> kbuckets_;
     };
 
 }

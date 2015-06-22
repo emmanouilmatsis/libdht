@@ -25,29 +25,9 @@ namespace libdht
                 });
     }
 
-    const std::array<uint8_t, libdht::kIDSize> ID::data() const
+    const std::array<uint8_t, libdht::kIDSize> & ID::data() const
     {
         return data_;
-    }
-
-    unsigned int ID::prefix(const ID& obj)
-    {
-        auto pair = std::mismatch(data_.cbegin(), data_.cend(), obj.data_.cbegin(), obj.data_.cend());
-
-        auto position = std::distance(data_.cbegin(), pair.first) * 8;
-
-        if (pair.first != data_.cend() && pair.second != obj.data_.cend())
-        {
-            auto x = *pair.first ^ *pair.second;
-
-            while((x & 0x80) == 0)
-            {
-                ++position;
-                x <<= 1;
-            }
-        }
-
-        return static_cast<unsigned int>(position);
     }
 
     bool operator==(const ID& lhs, const ID& rhs)
@@ -96,6 +76,26 @@ namespace libdht
         os << std::dec;
 
         return os;
+    }
+
+    unsigned int ID::prefix(const ID& obj)
+    {
+        auto pair = std::mismatch(data_.cbegin(), data_.cend(), obj.data_.cbegin(), obj.data_.cend());
+
+        auto position = std::distance(data_.cbegin(), pair.first) * 8;
+
+        if (pair.first != data_.cend() && pair.second != obj.data_.cend())
+        {
+            auto x = *pair.first ^ *pair.second;
+
+            while((x & 0x80) == 0)
+            {
+                ++position;
+                x <<= 1;
+            }
+        }
+
+        return static_cast<unsigned int>(position);
     }
 
 }

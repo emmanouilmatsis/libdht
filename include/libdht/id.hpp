@@ -26,9 +26,7 @@ namespace libdht
             ID& operator=(const ID&) = default;
             ~ID() = default;
 
-            const std::array<uint8_t, libdht::kIDSize> data() const;
-
-            unsigned int prefix(const ID&);
+            const std::array<uint8_t, libdht::kIDSize> & data() const;
 
             friend bool operator==(const ID& lhs, const ID& rhs);
             friend bool operator!=(const ID& lhs, const ID& rhs);
@@ -37,6 +35,8 @@ namespace libdht
             friend bool operator<=(const ID& lhs, const ID& rhs);
             friend bool operator>=(const ID& lhs, const ID& rhs);
             friend std::ostream& operator<<(std::ostream&, const ID&);
+
+            unsigned int prefix(const ID&);
 
         private:
             std::array<uint8_t, libdht::kIDSize> data_;

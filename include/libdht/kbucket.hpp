@@ -14,7 +14,7 @@ namespace libdht
     {
         public:
             KBucket();
-            KBucket(int min, int max);
+            KBucket(std::pair<unsigned int> range); // range_(std::move(range))
 
             KBucket(KBucket&&) = default;
             KBucket& operator=(KBucket&&) = default;
@@ -22,18 +22,26 @@ namespace libdht
             KBucket& operator=(const KBucket&) = default;
             ~KBucket() = default;
 
+            std::list<libdht::Node>::iterator begin();
+            std::list<libdht::Node>::const_iterator begin() const;
+            std::list<libdht::Node>::const_iterator cbegin() const;
+            std::list<libdht::Node>::iterator end();
+            std::list<libdht::Node>::const_iterator end() const;
+            std::list<libdht::Node>::const_iterator cend() const;
+
             bool add(std::shared_ptr<libdht::Node> node);
             bool remove(std::shared_ptr<libdht::Node> node);
+            bool contains(std::shared_ptr<libdht::Node> node);
+            bool in_range(std::shared_ptr<libdht::Node> node);
+            std::shared_ptr<libdht::Node> pop();
             std::shared_ptr<libdht::Node> random();
-            int depth();
-            bool has(std::shared_ptr<libdht::Node> node);
+            unsigned int depth(); // length of prefix shared by all nodes
 
         private:
-            int min_;
-            int max_;
+            std::pair<unsigned int, unsigned int> range_;
             std::chrono::time_point<std::chrono::steady_clock> time_;
-            std::list<KBucket> nodes_;
-            std::list<KBucket> cache_;
+            std::list<std::shared_ptr<Node>> nodes_;
+            std::list<std::shared_ptr<Node>> cache_;
     };
 
 }
