@@ -5,5 +5,5 @@ TEST(NodeTestCase, NodeIDTest)
 {
     libdht::Node node;
 
-    EXPECT_EQ(node.id().data().size(), libdht::kIDSize);
+    EXPECT_EQ(static_cast<int>(node.id().data().size()), libdht::kIDSize);
 }
