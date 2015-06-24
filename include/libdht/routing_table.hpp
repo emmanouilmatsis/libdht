@@ -1,6 +1,8 @@
 #ifndef LIBDHT_ROUTINGTABLE_H_
 #define LIBDHT_ROUTINGTABLE_H_
 
+#define EXCLUDE
+#ifndef EXCLUDE
 namespace libdht
 {
 
@@ -15,23 +17,23 @@ namespace libdht
             RoutingTable& operator=(const RoutingTable&) = default;
             ~RoutingTable() = default;
 
-            std::list<libdht::KBucket>::iterator begin();
-            std::list<libdht::KBucket>::const_iterator begin() const;
-            std::list<libdht::KBucket>::const_iterator cbegin() const;
-            std::list<libdht::KBucket>::iterator end();
-            std::list<libdht::KBucket>::const_iterator end() const;
-            std::list<libdht::KBucket>::const_iterator cend() const;
+            std::list<KBucket>::iterator begin();
+            std::list<KBucket>::const_iterator begin() const;
+            std::list<KBucket>::const_iterator cbegin() const;
+            std::list<KBucket>::iterator end();
+            std::list<KBucket>::const_iterator end() const;
+            std::list<KBucket>::const_iterator cend() const;
 
-            // return std::find(data_.begin(), data_.end(), [](){});
-            bool add(); // if contains own id or kbucket.depth % b then split bucket and kbucket.add() else kbucket.add()
-            std::list<libdht::KBucket>::iterator find(const Node &);
-            std::list<libdht::KBucket>::const_iterator find(const Node &) const;
-            bool split(std::list<libdht::KBucket>::iterator &kbucket); // const_iterator
+            bool add_contact(Node);
 
         private:
+            bool split(std::list<KBucket>::iterator); // const_iterator?
+
             std::list<KBucket> kbuckets_;
+            Node node_;
     };
 
 }
+#endif
 
 #endif // LIBDHT_ROUTINGTABLE_H_

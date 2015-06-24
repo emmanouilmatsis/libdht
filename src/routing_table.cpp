@@ -1,22 +1,34 @@
 #include "libdht/routing_table.hpp"
 
+#ifndef EXCLUDE
+
 namespace libdht
 {
 
-    bool RoutingTable::add()
+    RoutingTable::RoutingTable()
     {
-        auto kbucket = find(node);
-
-        // FIXME: make sure that kbucket.add() will always return true after spliting
-        // or in other words than new kbucket won't be full.
-        // SECTION 2.4 SAIS THE OPOSITE!
-        if (kbucket.contains(node) or !(kbucket.depth() % b))
-            split(kbucket);
-
-        return kbucket.add(node); // false because new kbucket could be full so cache node
     }
 
-    bool RoutingTable::split(kbucket)
+    bool RoutingTable::add_contact(Node node)
+    {
+        auto kbucket = std::find_if(kbuckets_.begin(), kbuckets_.end(),
+                [node=node](const KBucket &a) -> bool{
+                    return a.covers(node);
+                });
+
+        if (kbucket->add(node))
+            return true;
+
+        if (kbucket->covers(node_) || kbucket->depth() % kb != 0)
+        {
+            //split(kbucket); // TODO
+            return add_contact(node);
+        }
+
+        return false;
+    }
+
+    bool RoutingTable::split()
     {
         // 1. find middle new range
         // 2. create new kbucket
@@ -24,11 +36,9 @@ namespace libdht
         // 4. update new kbucket
         // 5. update old kbucket
 
-        auto middle = kbucket.range.second - (kbucket.range.
-
-        kbuckets.insert(std::next(kbucket), KBucket(std::pair<unsigned int, unsigned int>(,)));
-
         return true;
     }
 
 }
+
+#endif

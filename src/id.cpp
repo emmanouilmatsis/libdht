@@ -17,7 +17,7 @@ namespace libdht
 
     ID::ID(const std::string& str)
     {
-        auto hash = libdht::sha1(str);
+        auto hash = sha1(str);
 
         std::transform(data_.begin(), data_.end(), data_.begin(),
                 [it = hash.begin()](const uint &a) mutable -> uint8_t {
@@ -25,7 +25,7 @@ namespace libdht
                 });
     }
 
-    const std::array<uint8_t, libdht::kIDSize> & ID::data() const
+    std::array<uint8_t, kIDSize> ID::data() const
     {
         return data_;
     }
@@ -49,7 +49,7 @@ namespace libdht
         auto pair = std::mismatch(lhs.data_.cbegin(), lhs.data_.cend(), rhs.data_.cbegin(), rhs.data_.cend());
 
         if (pair.first != lhs.data_.cend() && pair.second != rhs.data_.cend())
-            return static_cast<int>(*pair.first) < static_cast<int>(*pair.second);
+            return *pair.first < *pair.second;
         return false;
     }
 
@@ -72,17 +72,17 @@ namespace libdht
     {
         os << std::hex;
         for (const auto& element : obj.data_)
-            os << std::setfill('0') << std::setw(2) << static_cast<unsigned int>(element);
+            os << std::setfill('0') << std::setw(2) << static_cast<int>(element);
         os << std::dec;
 
         return os;
     }
 
-    unsigned int ID::prefix(const ID& obj)
+    int ID::prefix(const ID& obj)
     {
         auto pair = std::mismatch(data_.cbegin(), data_.cend(), obj.data_.cbegin(), obj.data_.cend());
 
-        auto position = std::distance(data_.cbegin(), pair.first) * 8;
+        auto position = static_cast<int>(std::distance(data_.cbegin(), pair.first)) * 8;
 
         if (pair.first != data_.cend() && pair.second != obj.data_.cend())
         {
@@ -95,7 +95,7 @@ namespace libdht
             }
         }
 
-        return static_cast<unsigned int>(position);
+        return position;
     }
 
 }

@@ -3,10 +3,10 @@
 
 namespace libdht
 {
-    constexpr unsigned int kIDSize = 20;
-    constexpr unsigned int kK = 20;
-    constexpr unsigned int ka = 3;
-    constexpr unsigned int kb = 5;
+    constexpr int kIDSize = 20;
+    constexpr int kK = 20;
+    constexpr int ka = 3;
+    constexpr int kb = 5;
 }
 
 #endif // LIBDHT_CONSTANTS_H_

@@ -19,9 +19,11 @@ namespace libdht
             Node& operator=(const Node&) = default;
             ~Node() = default;
 
+            ID id() const;
+
         private:
             ID id_;
-            sockaddr_storage ss; // TODO: seperate addr and port to correct type
+            //sockaddr_storage ss; // TODO: seperate addr and port to correct type
     };
 
 }
