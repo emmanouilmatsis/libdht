@@ -6,7 +6,9 @@ set(libdht_VERSION_MAJOR 0)
 set(libdht_VERSION_MINOR 1)
 set(libdht_VERSION_PATCH 0)
 
-set(CMAKE_CXX_FLAGS "-std=c++14 -Wall")
+find_package(Threads REQUIRED)
+
+set(CMAKE_CXX_FLAGS "-std=c++14 -Wall -pthread")
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 

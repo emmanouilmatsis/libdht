@@ -7,7 +7,7 @@ TEST(IDTestCase, DefaultConstructorTest)
 {
     libdht::ID id;
 
-    EXPECT_EQ(id.data().size(), static_cast<size_t>(libdht::kIDSize));
+    EXPECT_EQ(static_cast<int>(id.data().size()), libdht::kIDSize);
 }
 
 TEST(IDTestCase, StringConstructorTest)
