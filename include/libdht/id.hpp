@@ -18,7 +18,8 @@ namespace libdht
     {
         public:
             ID();
-            ID(const std::string&);
+            ID(std::string);
+            ID(std::array<uint8_t, kIDSize> data);
 
             ID(ID&&) = default;
             ID& operator=(ID&&) = default;
@@ -36,7 +37,7 @@ namespace libdht
             friend bool operator>=(const ID& lhs, const ID& rhs);
             friend std::ostream& operator<<(std::ostream&, const ID&);
 
-            int prefix(const ID&);
+            int prefix(const ID&) const;
 
         private:
             std::array<uint8_t, kIDSize> data_;

@@ -15,7 +15,7 @@ namespace libdht
                 });
     }
 
-    ID::ID(const std::string& str)
+    ID::ID(std::string str)
     {
         auto hash = sha1(str);
 
@@ -23,6 +23,10 @@ namespace libdht
                 [it = hash.begin()](const uint &a) mutable -> uint8_t {
                     return static_cast<uint8_t>(std::stoul(std::string{*it++, *it++}, nullptr, 16));
                 });
+    }
+
+    ID::ID(std::array<uint8_t, kIDSize> data) : data_(data)
+    {
     }
 
     std::array<uint8_t, kIDSize> ID::data() const
@@ -78,7 +82,7 @@ namespace libdht
         return os;
     }
 
-    int ID::prefix(const ID& obj)
+    int ID::prefix(const ID& obj) const
     {
         auto pair = std::mismatch(data_.cbegin(), data_.cend(), obj.data_.cbegin(), obj.data_.cend());
 

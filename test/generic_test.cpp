@@ -1,19 +1,18 @@
 #include <iostream>
-#include <random>
+#include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 
-TEST(GenericTestCase, RandomTest)
+TEST(GenericTestCase, GenericTest)
 {
-    std::random_device rd;
+    constexpr int size = 10;
 
-    std::mt19937 mt(rd());
+    std::array<int, size> arr;
+    arr.fill(255);
 
-    std::uniform_int_distribution<int> uniform_dist(1, 10);
-
-    uniform_dist(mt);
-}
-
-TEST(GenericTestCase, StrToHexTest)
-{
+    std::for_each(arr.begin(), arr.end(),
+            [](const int &a) -> void {
+                //std::cout << a << std::endl;
+            });
 }

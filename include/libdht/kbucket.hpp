@@ -15,7 +15,7 @@ namespace libdht
     {
         public:
             KBucket();
-            KBucket(std::pair<int, int> range); // range_(std::move(range))
+            KBucket(std::pair<ID, ID> range);
 
             KBucket(KBucket&&) = default;
             KBucket& operator=(KBucket&&) = default;
@@ -32,11 +32,11 @@ namespace libdht
 
             bool add(Node);
             bool remove(Node);
-            void random();
-            bool contains(Node);
-            bool covers(Node);
-            bool full();
-            int depth();
+            Node random() const;
+            bool contains(Node) const;
+            bool covers(Node) const;
+            bool full() const;
+            int depth() const;
 
         private:
             std::pair<ID, ID> range_;

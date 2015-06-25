@@ -1,8 +1,11 @@
 #ifndef LIBDHT_ROUTINGTABLE_H_
 #define LIBDHT_ROUTINGTABLE_H_
 
+#include <list>
+
+#include "libdht/kbucket.hpp"
+
 #define EXCLUDE
-#ifndef EXCLUDE
 namespace libdht
 {
 
@@ -34,6 +37,5 @@ namespace libdht
     };
 
 }
-#endif
 
 #endif // LIBDHT_ROUTINGTABLE_H_

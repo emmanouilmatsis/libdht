@@ -12,6 +12,7 @@ namespace libdht
     {
         public:
             Node();
+            Node(ID id); // TODO: addr and port
 
             Node(Node&&) = default;
             Node& operator=(Node&&) = default;

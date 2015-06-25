@@ -20,15 +20,27 @@ TEST(IDTestCase, StringConstructorTest)
     EXPECT_EQ(os.str(), libdht::sha1("value"));
 }
 
+TEST(IDTestCase, DataConstructorTest)
+{
+    std::array<uint8_t, libdht::kIDSize> data;
+    data.fill(static_cast<uint8_t>(255));
+    libdht::ID id(data);
+
+    std::ostringstream os;
+    os << id;
+
+    EXPECT_EQ(os.str(), "ffffffffffffffffffffffffffffffffffffffff");
+}
+
 TEST(IDTestCase, PrefixTest)
 {
     libdht::ID id_a("a"); // 86f7e437faa5a7fce15d1ddcb9eaeaea377667b8
     libdht::ID id_b("b"); // e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98
     libdht::ID id_c("-"); // 3bc15c8aae3e4124dd409035f32ea2fd6835efc9
 
-    EXPECT_EQ(id_a.prefix(id_c), 0);
-    EXPECT_EQ(id_a.prefix(id_b), 1);
-    EXPECT_EQ(id_a.prefix(id_a), 160);
+    EXPECT_EQ(0, id_a.prefix(id_c));
+    EXPECT_EQ(1, id_a.prefix(id_b));
+    EXPECT_EQ(160, id_a.prefix(id_a));
 }
 
 TEST(IDTestCase, RelationalOperatorsTest)
