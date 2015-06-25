@@ -77,5 +77,5 @@ TEST(KBucketTestCase, DepthTest)
         kbucket.add(libdht::Node(libdht::ID(data)));
     }
 
-    EXPECT_EQ(8, kbucket.depth());
+    EXPECT_GE(kbucket.depth(), 8);
 }

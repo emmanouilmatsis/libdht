@@ -49,7 +49,7 @@ namespace libdht
 
         if (kbucket->covers(node_) || kbucket->depth() % kb != 0)
         {
-            // TODO: split bucket
+            split(kbucket); // TODO: split bucket
             return add_contact(node);
         }
         else
@@ -64,6 +64,29 @@ namespace libdht
     bool RoutingTable::split(std::list<KBucket>::iterator kbucket)
     {
         // 1. find middle new range
+        auto min = kbucket->range().first.data();
+        std::for_each(min.begin(), min.end(),
+                [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
+                    a = (a >> 1) | carry;
+                    carry = (a & 0x01) << 8;
+                });
+
+        auto max = kbucket->range().second.data();
+        std::for_each(max.begin(), max.end(),
+                [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
+                    a = (a >> 1) | carry;
+                    carry = (a & 0x01) << 8;
+                });
+
+        std::array<uint8_t, kIDSize> sum;
+        std::for_each(sum.rbegin(), sum.rend(),
+                [carry = static_cast<uint8_t>(0), it_min=min.rbegin(), it_max=max.rbegin()](uint8_t &a) mutable -> void {
+                    uint16_t temp_sum = *it_min++ + *it_max++ + carry;
+                    carry = static_cast<uint8_t>(temp_sum >> 8) & 0x01;
+                    a = static_cast<uint8_t>(temp_sum);
+                });
+
+
         // 2. create new kbucket
         // 3. insert new kbucket
         // 4. update new kbucket

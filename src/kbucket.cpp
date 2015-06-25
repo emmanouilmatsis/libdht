@@ -18,6 +18,11 @@ namespace libdht
     {
     }
 
+    std::pair<ID, ID> KBucket::range() const
+    {
+        return range_;
+    }
+
     std::list<Node>::iterator KBucket::begin()
     {
         return nodes_.begin();

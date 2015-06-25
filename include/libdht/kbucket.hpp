@@ -23,6 +23,8 @@ namespace libdht
             KBucket& operator=(const KBucket&) = default;
             ~KBucket() = default;
 
+            std::pair<ID, ID> range() const;
+
             std::list<Node>::iterator begin();
             std::list<Node>::const_iterator begin() const;
             std::list<Node>::const_iterator cbegin() const;
