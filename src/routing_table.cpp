@@ -67,15 +67,17 @@ namespace libdht
         auto min = kbucket->range().first.data();
         std::for_each(min.begin(), min.end(),
                 [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
+		    uint8_t next_carry = (a & 0x01) << 8;
                     a = (a >> 1) | carry;
-                    carry = (a & 0x01) << 8;
+                    carry  = next_carry;
                 });
 
         auto max = kbucket->range().second.data();
         std::for_each(max.begin(), max.end(),
-                [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
+		 [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
+		    uint8_t next_carry = (a & 0x01) << 8;
                     a = (a >> 1) | carry;
-                    carry = (a & 0x01) << 8;
+                    carry = next_carry;
                 });
 
         std::array<uint8_t, kIDSize> sum;
