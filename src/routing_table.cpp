@@ -63,7 +63,23 @@ namespace libdht
 
     bool RoutingTable::split(std::list<KBucket>::iterator kbucket)
     {
+        std::for_each(sum.rbegin(), sum.rend(),
+                [curry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
+                    a = (*it_a >> 1);
+                    b = (*it_b >> 1);
+
+                    if (++it_a != it_a.end() && ++it_b != it_b.end())
+                    {
+                        a |= *it_a << 7;
+                        b |= *it_b << 7;
+                    }
+
+                    sum = a + b + curry;
+                    curry = (a + b) >> 8;
+                });
+
         // 1. find middle new range
+        /*
         auto min = kbucket->range().first.data();
         std::for_each(min.begin(), min.end(),
                 [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
@@ -83,10 +99,21 @@ namespace libdht
         std::array<uint8_t, kIDSize> sum;
         std::for_each(sum.rbegin(), sum.rend(),
                 [carry = static_cast<uint8_t>(0), it_min=min.rbegin(), it_max=max.rbegin()](uint8_t &a) mutable -> void {
+
+		    uint8_t next_carry = (a & 0x01) << 8;
+                    a = (a >> 1) | carry;
+                    carry  = next_carry;
+
+
+		    uint8_t next_carry = (a & 0x01) << 8;
+                    a = (a >> 1) | carry;
+                    carry = next_carry;
+
                     uint16_t temp_sum = *it_min++ + *it_max++ + carry;
                     carry = static_cast<uint8_t>(temp_sum >> 8) & 0x01;
                     a = static_cast<uint8_t>(temp_sum);
                 });
+        */
 
 
         // 2. create new kbucket
