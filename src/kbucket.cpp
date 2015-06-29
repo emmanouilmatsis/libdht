@@ -11,7 +11,7 @@ namespace libdht
         std::array<uint8_t, libdht::kIDSize> max;
         max.fill(255);
 
-        range_ = std::make_pair(min, max);
+        range_ = std::make_pair(ID(min), ID(max));
     }
 
     KBucket::KBucket(std::pair<ID, ID> range) : range_(range)

@@ -1,10 +1,13 @@
 #include "libdht/routing_table.hpp"
 
+#include <iostream>
+
 namespace libdht
 {
 
     RoutingTable::RoutingTable()
     {
+        kbuckets_.push_back(KBucket());
     }
 
     std::list<KBucket>::iterator RoutingTable::begin()
@@ -61,71 +64,62 @@ namespace libdht
         return false;
     }
 
-    bool RoutingTable::split(std::list<KBucket>::iterator kbucket)
+    void RoutingTable::split(std::list<KBucket>::iterator iter_kbucket)
     {
-      
-        std::for_each(sum.rbegin(), sum.rend(),
-		      [it_min = kbucket->range().first.data().rbegin(),
-                       it_max = kbucket->range().second.data().rbegin(), 
-		       carry = static_cast<uint8_t>(0)](uint8_t &sum) mutable -> void {
-			
-			auto min = (*it_min >> 1);
-			auto max = (*it_max >> 1);
+        // 1. find middle of range
+        std::array<uint8_t, kIDSize> old_kbucket_max;
+        std::for_each(old_kbucket_max.rbegin(), old_kbucket_max.rend(),
+                [iter_min = iter_kbucket->range().first.data().rbegin(),
+                iter_max = iter_kbucket->range().second.data().rbegin(),
+                iter_min_end = iter_kbucket->range().first.data().rend(),
+                iter_max_end = iter_kbucket->range().second.data().rend(),
+                carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
 
-			if (++it_min != it_min.rend() && ++it_max != it_max.rend())
-			  {
-			    min |= *it_min << 7;
-			    max |= *it_max << 7;
-			  }
+                    auto min = static_cast<uint8_t>((*iter_min >> 1));
+                    auto max = static_cast<uint8_t>((*iter_max >> 1));
 
-			sum = static_cast<uint8_t>(min + max + carry);
-			carry = static_cast<uint8_t>((min + max + carry) >> 8);
-		      });
+                    if (++iter_min != iter_min_end && ++iter_max != iter_max_end)
+                    {
+                        min |= *iter_min << 7;
+                        max |= *iter_max << 7;
+                    }
 
-        // 1. find middle new range
-        /*
-        auto min = kbucket->range().first.data();
-        std::for_each(min.begin(), min.end(),
-                [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
-		    uint8_t next_carry = (a & 0x01) << 8;
-                    a = (a >> 1) | carry;
-                    carry  = next_carry;
+                    a = static_cast<uint8_t>(min + max + carry);
+                    carry = static_cast<uint8_t>((min + max + carry) >> 8);
                 });
 
-        auto max = kbucket->range().second.data();
-        std::for_each(max.begin(), max.end(),
-		 [carry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
-		    uint8_t next_carry = (a & 0x01) << 8;
-                    a = (a >> 1) | carry;
-                    carry = next_carry;
+        std::array<uint8_t, kIDSize> new_kbucket_min(old_kbucket_max);
+        std::for_each(new_kbucket_min.rbegin(),new_kbucket_min.rend(),
+                [carry = static_cast<uint8_t>(1)](uint8_t &a) mutable -> void {
+                    if (carry)
+                    {
+                        auto temp = a + carry;
+
+                        a = static_cast<uint8_t>(temp);
+                        carry = static_cast<uint8_t>(temp >> 8);
+                    }
                 });
 
-        std::array<uint8_t, kIDSize> sum;
-        std::for_each(sum.rbegin(), sum.rend(),
-                [carry = static_cast<uint8_t>(0), it_min=min.rbegin(), it_max=max.rbegin()](uint8_t &a) mutable -> void {
+        auto old_kbucket_range = std::make_pair(ID(iter_kbucket->range().first.data()), ID(old_kbucket_max));
+        auto new_kbucket_range = std::make_pair(ID(new_kbucket_min), ID(iter_kbucket->range().second.data()));;
 
-		    uint8_t next_carry = (a & 0x01) << 8;
-                    a = (a >> 1) | carry;
-                    carry  = next_carry;
+        // 2. create new kbuckets
+        auto old_kbucket = KBucket(old_kbucket_range);
+        auto new_kbucket = KBucket(new_kbucket_range);
 
+        // 3. reassign nodes to new kbuckets
+        for (const auto &n : *iter_kbucket)
+        {
+            if (!old_kbucket.covers(n))
+                old_kbucket.add(n);
+            else
+                new_kbucket.add(n);
+        }
 
-		    uint8_t next_carry = (a & 0x01) << 8;
-                    a = (a >> 1) | carry;
-                    carry = next_carry;
-
-                    uint16_t temp_sum = *it_min++ + *it_max++ + carry;
-                    carry = static_cast<uint8_t>(temp_sum >> 8) & 0x01;
-                    a = static_cast<uint8_t>(temp_sum);
-                });
-        */
-
-
-        // 2. create new kbucket
-        // 3. insert new kbucket
-        // 4. update new kbucket
-        // 5. update old kbucket
-
-        return true;
+        // 4. insert new kbuckets
+        kbuckets_.insert(iter_kbucket, old_kbucket);
+        kbuckets_.insert(iter_kbucket, new_kbucket);
+        kbuckets_.erase(iter_kbucket);
     }
 
 }

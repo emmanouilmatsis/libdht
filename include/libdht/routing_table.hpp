@@ -30,7 +30,7 @@ namespace libdht
             bool add_contact(Node);
 
         private:
-            bool split(std::list<KBucket>::iterator); // const_iterator?
+            void split(std::list<KBucket>::iterator); // const_iterator?
 
             std::list<KBucket> kbuckets_;
             Node node_;
