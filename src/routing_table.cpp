@@ -63,20 +63,24 @@ namespace libdht
 
     bool RoutingTable::split(std::list<KBucket>::iterator kbucket)
     {
+      
         std::for_each(sum.rbegin(), sum.rend(),
-                [curry = static_cast<uint8_t>(0)](uint8_t &a) mutable -> void {
-                    a = (*it_a >> 1);
-                    b = (*it_b >> 1);
+		      [it_min = kbucket->range().first.data().rbegin(),
+                       it_max = kbucket->range().second.data().rbegin(), 
+		       carry = static_cast<uint8_t>(0)](uint8_t &sum) mutable -> void {
+			
+			auto min = (*it_min >> 1);
+			auto max = (*it_max >> 1);
 
-                    if (++it_a != it_a.end() && ++it_b != it_b.end())
-                    {
-                        a |= *it_a << 7;
-                        b |= *it_b << 7;
-                    }
+			if (++it_min != it_min.rend() && ++it_max != it_max.rend())
+			  {
+			    min |= *it_min << 7;
+			    max |= *it_max << 7;
+			  }
 
-                    sum = a + b + curry;
-                    curry = (a + b) >> 8;
-                });
+			sum = static_cast<uint8_t>(min + max + carry);
+			carry = static_cast<uint8_t>((min + max + carry) >> 8);
+		      });
 
         // 1. find middle new range
         /*
