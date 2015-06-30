@@ -29,6 +29,66 @@ namespace libdht
     {
     }
 
+    std::array<uint8_t, kIDSize>::iterator ID::begin()
+    {
+        return data_.begin();
+    }
+
+    std::array<uint8_t, kIDSize>::const_iterator ID::begin() const
+    {
+        return data_.cbegin();
+    }
+
+    std::array<uint8_t, kIDSize>::const_iterator ID::cbegin() const
+    {
+        return data_.cbegin();
+    }
+
+    std::array<uint8_t, kIDSize>::iterator ID::end()
+    {
+        return data_.end();
+    }
+
+    std::array<uint8_t, kIDSize>::const_iterator ID::end() const
+    {
+        return data_.cend();
+    }
+
+    std::array<uint8_t, kIDSize>::const_iterator ID::cend() const
+    {
+        return data_.cend();
+    }
+
+    std::array<uint8_t, kIDSize>::reverse_iterator ID::rbegin()
+    {
+        return data_.rbegin();
+    }
+
+    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::rbegin() const
+    {
+        return data_.crbegin();
+    }
+
+    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::crbegin() const
+    {
+        return data_.crbegin();
+    }
+
+    std::array<uint8_t, kIDSize>::reverse_iterator ID::rend()
+    {
+        return data_.rend();
+    }
+
+    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::rend() const
+    {
+        return data_.crend();
+    }
+
+    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::crend() const
+    {
+        return data_.crend();
+    }
+
     std::array<uint8_t, kIDSize> ID::data() const
     {
         return data_;

@@ -27,6 +27,19 @@ namespace libdht
             ID& operator=(const ID&) = default;
             ~ID() = default;
 
+            std::array<uint8_t, kIDSize>::iterator begin();
+            std::array<uint8_t, kIDSize>::const_iterator begin() const;
+            std::array<uint8_t, kIDSize>::const_iterator cbegin() const;
+            std::array<uint8_t, kIDSize>::iterator end();
+            std::array<uint8_t, kIDSize>::const_iterator end() const;
+            std::array<uint8_t, kIDSize>::const_iterator cend() const;
+            std::array<uint8_t, kIDSize>::reverse_iterator rbegin();
+            std::array<uint8_t, kIDSize>::const_reverse_iterator rbegin() const;
+            std::array<uint8_t, kIDSize>::const_reverse_iterator crbegin() const;
+            std::array<uint8_t, kIDSize>::reverse_iterator rend();
+            std::array<uint8_t, kIDSize>::const_reverse_iterator rend() const;
+            std::array<uint8_t, kIDSize>::const_reverse_iterator crend() const;
+
             std::array<uint8_t, kIDSize> data() const;
 
             friend bool operator==(const ID& lhs, const ID& rhs);

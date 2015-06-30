@@ -26,6 +26,12 @@ namespace libdht
             std::list<KBucket>::iterator end();
             std::list<KBucket>::const_iterator end() const;
             std::list<KBucket>::const_iterator cend() const;
+            std::list<KBucket>::reverse_iterator rbegin();
+            std::list<KBucket>::const_reverse_iterator rbegin() const;
+            std::list<KBucket>::const_reverse_iterator crbegin() const;
+            std::list<KBucket>::reverse_iterator rend();
+            std::list<KBucket>::const_reverse_iterator rend() const;
+            std::list<KBucket>::const_reverse_iterator crend() const;
 
             bool add_contact(Node);
 

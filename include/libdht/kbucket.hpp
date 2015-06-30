@@ -31,6 +31,12 @@ namespace libdht
             std::list<Node>::iterator end();
             std::list<Node>::const_iterator end() const;
             std::list<Node>::const_iterator cend() const;
+            std::list<Node>::reverse_iterator rbegin();
+            std::list<Node>::const_reverse_iterator rbegin() const;
+            std::list<Node>::const_reverse_iterator crbegin() const;
+            std::list<Node>::reverse_iterator rend();
+            std::list<Node>::const_reverse_iterator rend() const;
+            std::list<Node>::const_reverse_iterator crend() const;
 
             bool add(Node);
             bool remove(Node);

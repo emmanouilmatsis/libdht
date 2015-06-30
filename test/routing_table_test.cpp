@@ -36,5 +36,14 @@ TEST(RoutingTableTestCase, AddContactTest)
         routing_table.add_contact(libdht::Node(data));
     }
 
-    EXPECT_EQ(2, std::distance(routing_table.begin(), routing_table.end()));
+    std::cout << "======================================================" << std::endl;
+    for (const auto &kbucket : routing_table)
+    {
+        std::cout << "kbucket: ";
+        std::cout << "[" << kbucket.range().first;
+        std::cout << "," << kbucket.range().second;
+        std::cout << "]" << std::endl << std::endl;
+    }
+
+    EXPECT_EQ(5, std::distance(routing_table.begin(), routing_table.end()));
 }

@@ -53,6 +53,36 @@ namespace libdht
         return nodes_.cend();
     }
 
+    std::list<Node>::reverse_iterator KBucket::rbegin()
+    {
+        return nodes_.rbegin();
+    }
+
+    std::list<Node>::const_reverse_iterator KBucket::rbegin() const
+    {
+        return nodes_.crbegin();
+    }
+
+    std::list<Node>::const_reverse_iterator KBucket::crbegin() const
+    {
+        return nodes_.crbegin();
+    }
+
+    std::list<Node>::reverse_iterator KBucket::rend()
+    {
+        return nodes_.rend();
+    }
+
+    std::list<Node>::const_reverse_iterator KBucket::rend() const
+    {
+        return nodes_.crend();
+    }
+
+    std::list<Node>::const_reverse_iterator KBucket::crend() const
+    {
+        return nodes_.crend();
+    }
+
     bool KBucket::add(Node node)
     {
         if (contains(node))
