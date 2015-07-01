@@ -72,17 +72,17 @@ namespace libdht
 
     bool RoutingTable::add_contact(Node node)
     {
-        auto kbucket = std::find_if(kbuckets_.begin(), kbuckets_.end(),
+        auto iter_kbucket = std::find_if(kbuckets_.begin(), kbuckets_.end(),
                 [node=node](const KBucket &a) -> bool {
                     return a.covers(node);
                 });
 
-        if (kbucket->add(node))
+        if (iter_kbucket->add(node))
             return true;
 
-        if (kbucket->covers(node_) || kbucket->depth() % kb != 0)
+        if (iter_kbucket->covers(node_) || iter_kbucket->depth() % kb != 0)
         {
-            split(kbucket);
+            split(iter_kbucket);
             return add_contact(node);
         }
         else
@@ -94,38 +94,39 @@ namespace libdht
         return false;
     }
 
-    void RoutingTable::split(std::list<KBucket>::iterator iter_kbucket)
+    void RoutingTable::split(std::list<KBucket>::iterator iter_old_kbucket)
     {
-        auto min = iter_kbucket->range().first;
-        auto max = iter_kbucket->range().second;
+        auto old_range = iter_old_kbucket->range();
+        auto old_min = old_range.first;
+        auto old_max = old_range.second;
 
         // 1. find middle of range
-        ID min_a(min);
-        ID max_a;
-        std::for_each(max_a.rbegin(), max_a.rend(),
-                [iter_min = min.crbegin(),
-                iter_min_crend = min.crend(),
-                iter_max = max.crbegin(),
-                iter_max_crend = max.crend(),
+        ID new_left_min(old_min);
+        ID new_left_max;
+        std::for_each(new_left_max.rbegin(), new_left_max.rend(),
+                [iter_old_min = old_min.crbegin(),
+                iter_old_min_crend = old_min.crend(),
+                iter_old_max = old_max.crbegin(),
+                iter_old_max_crend = old_max.crend(),
                 carry = static_cast<uint8_t>(0)]
                 (uint8_t &a) mutable -> void {
 
-                    auto min = static_cast<uint8_t>((*iter_min >> 1));
-                    auto max = static_cast<uint8_t>((*iter_max >> 1));
+                    auto byte_min = static_cast<uint8_t>((*iter_old_min >> 1));
+                    auto byte_max = static_cast<uint8_t>((*iter_old_max >> 1));
 
-                    if (++iter_min != iter_min_crend && ++iter_max != iter_max_crend)
+                    if (++iter_old_min != iter_old_min_crend && ++iter_old_max != iter_old_max_crend)
                     {
-                        min |= *iter_min << 7;
-                        max |= *iter_max << 7;
+                        byte_min |= *iter_old_min << 7;
+                        byte_max |= *iter_old_max << 7;
                     }
 
-                    a = min + max + carry;
-                    carry = (min + max + carry) >> 8;
+                    a = byte_min + byte_max + carry;
+                    carry = (byte_min + byte_max + carry) >> 8;
                 });
 
-        ID min_b(max_a);
-        ID max_b(max);
-        std::for_each(min_b.rbegin(), min_b.rend(),
+        ID new_right_min(new_left_max);
+        ID new_right_max(old_max);
+        std::for_each(new_right_min.rbegin(), new_right_min.rend(),
                 [carry = static_cast<uint8_t>(1)]
                 (uint8_t &a) mutable -> void {
                     if (carry)
@@ -138,35 +139,22 @@ namespace libdht
                 });
 
         // 2. create new kbuckets
-        auto kbucket_a = KBucket(std::make_pair(min_a, max_a));
-        auto kbucket_b = KBucket(std::make_pair(min_b, max_b));
-
-        auto range_a = kbucket_a.range();
-        auto range_b = kbucket_b.range();
-        std::cout << "a[" << range_a.first << ", " << range_a.second << "]: " << std::endl;
-        std::cout << "b[" << range_b.first << ", " << range_b.second << "]: " << std::endl;
-        std::cout << "------------------------------------------------------" << std::endl;
+        auto new_left_kbucket = KBucket(std::make_pair(new_left_min, new_left_max));
+        auto new_right_kbucket = KBucket(std::make_pair(new_right_min, new_right_max));
 
         // 3. reassign nodes to new kbuckets
-        for (const auto &n : *iter_kbucket)
+        for (const auto &n : *iter_old_kbucket)
         {
-            if (kbucket_a.covers(n))
-            {
-                std::cout << "a[" << range_a.first << ", " << range_a.second << "]: " << n.id() << std::endl;
-                kbucket_a.add(n);
-            }
+            if (new_left_kbucket.covers(n))
+                new_left_kbucket.add(n);
             else
-            {
-                std::cout << "b[" << range_b.first << ", " << range_b.second << "]: " << n.id() << std::endl;
-                kbucket_b.add(n);
-            }
+                new_right_kbucket.add(n);
         }
-        std::cout << std::endl;
 
         // 4. insert new kbuckets
-        kbuckets_.insert(iter_kbucket, kbucket_a);
-        kbuckets_.insert(iter_kbucket, kbucket_b);
-        kbuckets_.erase(iter_kbucket);
+        kbuckets_.insert(iter_old_kbucket, new_left_kbucket);
+        kbuckets_.insert(iter_old_kbucket, new_right_kbucket);
+        kbuckets_.erase(iter_old_kbucket);
     }
 
 }
