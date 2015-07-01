@@ -5,9 +5,10 @@
 
 TEST(IDTestCase, DefaultConstructorTest)
 {
-    libdht::ID id;
+    libdht::ID id_a;
+    libdht::ID id_b;
 
-    EXPECT_EQ(static_cast<int>(id.data().size()), libdht::kIDSize);
+    EXPECT_NE(id_a.data(), id_b.data());
 }
 
 TEST(IDTestCase, StringConstructorTest)
@@ -22,9 +23,12 @@ TEST(IDTestCase, StringConstructorTest)
 
 TEST(IDTestCase, DataConstructorTest)
 {
-    std::array<uint8_t, libdht::kIDSize> data;
-    data.fill(static_cast<uint8_t>(255));
+    /*
+    std::bitset<kIDSize> data;
+    data.flip();
     libdht::ID id(data);
+    */
+    libdht::ID id(std::bitset<kIDSize>().flip());
 
     std::ostringstream os;
     os << id;

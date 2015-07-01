@@ -7,7 +7,7 @@ namespace libdht
     {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::bernoulli_distribution<uint8_t> d;
+        std::bernoulli_distribution d;
 
         for (int i = 0; i < kIDSize; i++)
             data[i] = d(gen);
@@ -15,83 +15,41 @@ namespace libdht
 
     ID::ID(std::string str)
     {
-        auto hash = sha1(str);
+        auto hash = sha1(str); // 160 bits
+        auto hash_size = hash.size() * 4; // in bits
 
+        std::bitset<4> nibble;
+
+        for (int i = 0; i < std::min(kIDSize, hash_size); i++)
+        {
+            if (!(i % 4))
+            {
+                nibble = std::bitset<4>(std::stoul(std::string(hash.back()), nulptr, 16));
+                hash.pop_back();
+            }
+
+            data_[i] = nibble[i % 4];
+        }
+
+        /*
         for (int i = 0; i < kIDSize; i++)
         {
+            if (!(i % 4))
+            {
+                if (hash.empty())
+                    break;
+
+                nibble = std::bitset<4>(std::stoul(std::string(hash.back()), nulptr, 16));
+                hash.pop_back();
+            }
+
+            data_[i] = nibble[i % 4];
         }
-
-
-        for (int i = 0; i < kIDSize / 4 && i < hash.size(); i++)
-        {
-            auto byte = static_cast<uint8_t>(std::stoul(hash.substr(hash.size() - 1 - i, 1), nulptr, 16));
-            for (int j = 0; j < 4; j++)
-                data[i * 4 + j] = (n >> j) & 0x01;
-        }
+        */
     }
 
-    ID::ID(std::array<uint8_t, kIDSize> data) : data_(data)
+    ID::ID(std::bitset<kIDSize> data) : data_(data)
     {
-    }
-
-    std::array<uint8_t, kIDSize>::iterator ID::begin()
-    {
-        return data_.begin();
-    }
-
-    std::array<uint8_t, kIDSize>::const_iterator ID::begin() const
-    {
-        return data_.cbegin();
-    }
-
-    std::array<uint8_t, kIDSize>::const_iterator ID::cbegin() const
-    {
-        return data_.cbegin();
-    }
-
-    std::array<uint8_t, kIDSize>::iterator ID::end()
-    {
-        return data_.end();
-    }
-
-    std::array<uint8_t, kIDSize>::const_iterator ID::end() const
-    {
-        return data_.cend();
-    }
-
-    std::array<uint8_t, kIDSize>::const_iterator ID::cend() const
-    {
-        return data_.cend();
-    }
-
-    std::array<uint8_t, kIDSize>::reverse_iterator ID::rbegin()
-    {
-        return data_.rbegin();
-    }
-
-    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::rbegin() const
-    {
-        return data_.crbegin();
-    }
-
-    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::crbegin() const
-    {
-        return data_.crbegin();
-    }
-
-    std::array<uint8_t, kIDSize>::reverse_iterator ID::rend()
-    {
-        return data_.rend();
-    }
-
-    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::rend() const
-    {
-        return data_.crend();
-    }
-
-    std::array<uint8_t, kIDSize>::const_reverse_iterator ID::crend() const
-    {
-        return data_.crend();
     }
 
     std::array<uint8_t, kIDSize> ID::data() const
