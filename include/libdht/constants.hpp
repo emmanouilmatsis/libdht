@@ -3,7 +3,7 @@
 
 namespace libdht
 {
-    constexpr int kIDSize = 20;
+    constexpr int kIDSize = 160;
     constexpr int kK = 20;
     constexpr int ka = 3;
     constexpr int kb = 5;

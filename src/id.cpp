@@ -6,23 +6,28 @@ namespace libdht
     ID::ID()
     {
         std::random_device rd;
-        std::mt19937 mt(rd());
-        std::uniform_int_distribution<uint8_t> uniform_dist;
+        std::mt19937 gen(rd());
+        std::bernoulli_distribution<uint8_t> d;
 
-        std::transform(data_.begin(), data_.end(), data_.begin(),
-                [mt, uniform_dist] (const uint8_t &a) mutable -> uint8_t {
-                    return uniform_dist(mt);
-                });
+        for (int i = 0; i < kIDSize; i++)
+            data[i] = d(gen);
     }
 
     ID::ID(std::string str)
     {
         auto hash = sha1(str);
 
-        std::transform(data_.begin(), data_.end(), data_.begin(),
-                [it = hash.begin()](const uint &a) mutable -> uint8_t {
-                    return static_cast<uint8_t>(std::stoul(std::string{*it++, *it++}, nullptr, 16));
-                });
+        for (int i = 0; i < kIDSize; i++)
+        {
+        }
+
+
+        for (int i = 0; i < kIDSize / 4 && i < hash.size(); i++)
+        {
+            auto byte = static_cast<uint8_t>(std::stoul(hash.substr(hash.size() - 1 - i, 1), nulptr, 16));
+            for (int j = 0; j < 4; j++)
+                data[i * 4 + j] = (n >> j) & 0x01;
+        }
     }
 
     ID::ID(std::array<uint8_t, kIDSize> data) : data_(data)
