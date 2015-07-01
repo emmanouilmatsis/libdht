@@ -5,7 +5,6 @@
 
 #include "libdht/kbucket.hpp"
 
-#define EXCLUDE
 namespace libdht
 {
 
