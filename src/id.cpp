@@ -16,36 +16,19 @@ namespace libdht
     ID::ID(std::string str)
     {
         auto hash = sha1(str); // 160 bits
-        auto hash_size = hash.size() * 4; // in bits
 
         std::bitset<4> nibble;
 
-        for (int i = 0; i < std::min(kIDSize, hash_size); i++)
+        for (int i = 0; i < std::min(kIDSize, hash.size() * 4); i++)
         {
             if (!(i % 4))
             {
                 nibble = std::bitset<4>(std::stoul(std::string(hash.back()), nulptr, 16));
-                hash.pop_back();
+                std::rotate(hash.rbegin(), hash.rbegin() + 1, hash.rend());
             }
 
             data_[i] = nibble[i % 4];
         }
-
-        /*
-        for (int i = 0; i < kIDSize; i++)
-        {
-            if (!(i % 4))
-            {
-                if (hash.empty())
-                    break;
-
-                nibble = std::bitset<4>(std::stoul(std::string(hash.back()), nulptr, 16));
-                hash.pop_back();
-            }
-
-            data_[i] = nibble[i % 4];
-        }
-        */
     }
 
     ID::ID(std::bitset<kIDSize> data) : data_(data)

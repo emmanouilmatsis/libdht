@@ -5,10 +5,7 @@
 
 TEST(IDTestCase, DefaultConstructorTest)
 {
-    libdht::ID id_a;
-    libdht::ID id_b;
-
-    EXPECT_NE(id_a.data(), id_b.data());
+    libdht::ID id;
 }
 
 TEST(IDTestCase, StringConstructorTest)
