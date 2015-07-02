@@ -19,7 +19,7 @@ namespace libdht
 
         std::bitset<4> nibble;
 
-        for (int i = 0; i < std::min(kIDSize, hash.size() * 4); i++)
+        for (int i = 0; i < std::min(kIDSize, static_cast<int>(hash.size() * 4)); i++)
         {
             if (!(i % 4))
             {
@@ -54,8 +54,8 @@ namespace libdht
     {
         for (int i = kIDSize-1; i >= 0; i--)
         {
-	  if (lhs.data_.test(i) && !rhs.data_.test(i) return false;
-	      if (!lhs.data_.test(i) && rhs.data_.test(i) return true;
+          if (lhs.data_.test(i) && !rhs.data_.test(i)) return false;
+          if (!lhs.data_.test(i) && rhs.data_.test(i)) return true;
         }
 
         return false;
