@@ -10,7 +10,7 @@ namespace libdht
         std::bernoulli_distribution d;
 
         for (int i = 0; i < kIDSize; i++)
-            data[i] = d(gen);
+            data_[i] = d(gen);
     }
 
     ID::ID(std::string str)
@@ -42,24 +42,21 @@ namespace libdht
 
     bool operator==(const ID& lhs, const ID& rhs)
     {
-        auto pair = std::mismatch(lhs.data_.cbegin(), lhs.data_.cend(), rhs.data_.cbegin(), rhs.data_.cend());
-
-        if (pair.first != lhs.data_.cend() && pair.second != rhs.data_.cend())
-            return false;
-        return true;
+        return lhs.data_ == rhs.data_;
     }
 
     bool operator!=(const ID& lhs, const ID& rhs)
     {
-        return !(lhs == rhs);
+        return lhs.data_ != rhs.data_;
     }
 
     bool operator<(const ID& lhs, const ID& rhs)
     {
-        auto pair = std::mismatch(lhs.data_.cbegin(), lhs.data_.cend(), rhs.data_.cbegin(), rhs.data_.cend());
+        for (int i = kIDSize-1; i >= 0; i--) {
+            if (x[i] && !y[i]) return false;
+            if (!x[i] && y[i]) return true;
+        }
 
-        if (pair.first != lhs.data_.cend() && pair.second != rhs.data_.cend())
-            return *pair.first < *pair.second;
         return false;
     }
 
@@ -81,8 +78,8 @@ namespace libdht
     std::ostream& operator<<(std::ostream& os, const ID& obj)
     {
         os << std::hex;
-        for (const auto& element : obj.data_)
-            os << std::setfill('0') << std::setw(2) << static_cast<int>(element);
+        for (int i = kIDSize-1; i >= 0; i--)
+            os << std::setfill('0') << std::setw(2) << static_cast<int>(data_[i]);
         os << std::dec;
 
         return os;
@@ -90,22 +87,17 @@ namespace libdht
 
     int ID::prefix(const ID& obj) const
     {
-        auto pair = std::mismatch(data_.cbegin(), data_.cend(), obj.data_.cbegin(), obj.data_.cend());
+        auto x = data_ ^ obj.data();
 
-        auto position = static_cast<int>(std::distance(data_.cbegin(), pair.first)) * 8;
+        auto pos = 0;
 
-        if (pair.first != data_.cend() && pair.second != obj.data_.cend())
+        while (!x.test(kIDSize - 1))
         {
-            auto x = *pair.first ^ *pair.second;
-
-            while((x & 0x80) == 0)
-            {
-                ++position;
-                x <<= 1;
-            }
+            x <<= 1;
+            ++pos;
         }
 
-        return position;
+        return pos;
     }
 
 }

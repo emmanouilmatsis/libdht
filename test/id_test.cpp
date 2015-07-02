@@ -20,11 +20,6 @@ TEST(IDTestCase, StringConstructorTest)
 
 TEST(IDTestCase, DataConstructorTest)
 {
-    /*
-    std::bitset<kIDSize> data;
-    data.flip();
-    libdht::ID id(data);
-    */
     libdht::ID id(std::bitset<kIDSize>().flip());
 
     std::ostringstream os;
