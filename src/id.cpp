@@ -52,9 +52,10 @@ namespace libdht
 
     bool operator<(const ID& lhs, const ID& rhs)
     {
-        for (int i = kIDSize-1; i >= 0; i--) {
-            if (x[i] && !y[i]) return false;
-            if (!x[i] && y[i]) return true;
+        for (int i = kIDSize-1; i >= 0; i--)
+        {
+            if (lhs.data_[i] && !rhs.data_[i]) return false;
+            if (!lhs.data_[i] && rhs.data_[i]) return true;
         }
 
         return false;
