@@ -54,8 +54,8 @@ namespace libdht
     {
         for (int i = kIDSize-1; i >= 0; i--)
         {
-            if (lhs.data_[i] && !rhs.data_[i]) return false;
-            if (!lhs.data_[i] && rhs.data_[i]) return true;
+	  if (lhs.data_.test(i) && !rhs.data_.test(i) return false;
+	      if (!lhs.data_.test(i) && rhs.data_.test(i) return true;
         }
 
         return false;
