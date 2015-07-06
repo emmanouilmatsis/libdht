@@ -3,15 +3,12 @@
 namespace libdht
 {
 
-    KBucket::KBucket() // TODO
+    KBucket::KBucket() : time_(std::chrono::steady_clock::now())
     {
-        // prefix default constructor all zero
-        // TODO: time_
     }
 
-    KBucket::KBucket(std::bitset<kIDSize> prefix) : prefix_(prefix) // TODO
+    KBucket::KBucket(std::bitset<kIDSize> prefix) : prefix_(prefix), time_(std::chrono::steady_clock::now())
     {
-        // TODO: time_
     }
 
     std::bitset<kIDSize> KBucket::prefix() const
@@ -85,8 +82,8 @@ namespace libdht
         {
             nodes_.splice(nodes_.cend(), nodes_,
                     std::find_if(nodes_.cbegin(), nodes_.cend(),
-                        [b=node](const Node &a) -> bool { // TODO: compare address and port
-                            return a.id() == b.id();
+                        [b=node](const Node &a) -> bool {
+                            return a.id() == b.id(); // TODO: compare address and port
                         })
                     );
         }
@@ -123,11 +120,6 @@ namespace libdht
     bool KBucket::full() const
     {
         return nodes_.size() >= kK;
-    }
-
-    bool KBucket::covers(Node node) const // TODO
-    {
-        return true;
     }
 
     int KBucket::depth() const

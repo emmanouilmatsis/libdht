@@ -42,7 +42,6 @@ namespace libdht
             bool remove(Node);
             Node random() const;
             bool contains(Node) const;
-            bool covers(Node) const;
             bool full() const;
             int depth() const;
 

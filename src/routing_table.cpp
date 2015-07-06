@@ -70,6 +70,14 @@ namespace libdht
         return kbuckets_.crend();
     }
 
+
+    bool RoutingTable::covers(std::list<KBucket>::iterator iter_kbucket)
+    {
+        return iter_kbucket->prefix <= node.id
+            && std::next(iter_kbucket)->prefix > node.id
+            || std::next(iter_kbucket) == kbuckets_.end();
+    }
+
     bool RoutingTable::add_contact(Node node) // TODO
     {
         auto iter_kbucket = std::find_if(kbuckets_.begin(), kbuckets_.end(),
