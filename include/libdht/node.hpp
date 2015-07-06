@@ -1,7 +1,7 @@
 #ifndef LIBDHT_NODE_H_
 #define LIBDHT_NODE_H_
 
-#include <sys/socket.h>
+#include <string>
 
 #include "libdht/id.hpp"
 
@@ -12,7 +12,7 @@ namespace libdht
     {
         public:
             Node();
-            Node(ID id); // TODO: addr and port
+            Node(ID id, std::string address, int port);
 
             Node(Node&&) = default;
             Node& operator=(Node&&) = default;
@@ -21,10 +21,13 @@ namespace libdht
             ~Node() = default;
 
             ID id() const;
+            std::string address() const;
+            int port() const;
 
         private:
             ID id_;
-            //sockaddr_storage ss; // TODO: seperate addr and port to correct type
+            std::string address_;
+            int port_;
     };
 
 }

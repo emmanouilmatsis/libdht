@@ -70,7 +70,7 @@ namespace libdht
         return kbuckets_.crend();
     }
 
-    bool RoutingTable::add_contact(Node node)
+    bool RoutingTable::add_contact(Node node) // TODO
     {
         auto iter_kbucket = std::find_if(kbuckets_.begin(), kbuckets_.end(),
                 [node=node](const KBucket &a) -> bool {
@@ -94,8 +94,10 @@ namespace libdht
         return false;
     }
 
-    void RoutingTable::split(std::list<KBucket>::iterator iter_old_kbucket)
+    void RoutingTable::split(std::list<KBucket>::iterator iter_old_kbucket) // TODO
     {
+#define EXCLUDE
+#ifndef EXCLUDE
         auto old_range = iter_old_kbucket->range();
         auto old_min = old_range.first;
         auto old_max = old_range.second;
@@ -155,6 +157,7 @@ namespace libdht
         kbuckets_.insert(iter_old_kbucket, new_left_kbucket);
         kbuckets_.insert(iter_old_kbucket, new_right_kbucket);
         kbuckets_.erase(iter_old_kbucket);
+#endif
     }
 
 }

@@ -4,17 +4,18 @@
 TEST(KBucketTestCase, DefaultConstructorTest)
 {
     libdht::KBucket kbucket;
+
+    EXPECT_TRUE(kbucket.prefix().none());
 }
 
 TEST(KBucketTestCase, RangeConstructorTest)
 {
-    std::array<uint8_t, libdht::kIDSize> min;
-    min.fill(static_cast<uint8_t>(0));
+    std::bitset<libdht::kIDSize> prefix;
+    prefix.flip();
 
-    std::array<uint8_t, libdht::kIDSize> max;
-    max.fill(static_cast<uint8_t>(255));
+    libdht::KBucket kbucket(prefix);
 
-    libdht::KBucket kbucket(std::make_pair(min, max));
+    EXPECT_TRUE(kbucket.prefix().all());
 }
 
 TEST(KBucketTestCase, AddTest)
@@ -24,6 +25,8 @@ TEST(KBucketTestCase, AddTest)
     libdht::KBucket kbucket;
 
     kbucket.add(node);
+
+    EXPECT_EQ(1, std::distance(kbucket.begin(), kbucket.end()));
 }
 
 TEST(KBucketTestCase, ContainsTest)
@@ -55,12 +58,7 @@ TEST(KBucketTestCase, CoversTest)
 
     EXPECT_TRUE(kbucket_a.covers(node));
 
-    std::array<uint8_t, libdht::kIDSize> min;
-    min.fill(static_cast<uint8_t>(0));
-    std::array<uint8_t, libdht::kIDSize> max;
-    max.fill(static_cast<uint8_t>(0));
-
-    libdht::KBucket kbucket_b(std::make_pair(min, max));
+    libdht::KBucket kbucket_b(std::bitset<libdht::kIDSize>().flip());
 
     EXPECT_FALSE(kbucket_b.covers(node));
 }
@@ -71,11 +69,9 @@ TEST(KBucketTestCase, DepthTest)
 
     for (auto i = 0; i < libdht::kK; i++)
     {
-        auto data = libdht::ID().data();
-        data.front() = static_cast<uint8_t>(0);
-
-        kbucket.add(libdht::Node(libdht::ID(data)));
+        auto data = libdht::ID().data().reset(libdht::kIDSize - 1);
+        kbucket.add(libdht::Node(libdht::ID(data), "", 0));
     }
 
-    EXPECT_GE(kbucket.depth(), 8);
+    EXPECT_GE(kbucket.depth(), 1);
 }

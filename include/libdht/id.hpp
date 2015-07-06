@@ -18,7 +18,7 @@ namespace libdht
         public:
             ID();
             ID(std::string);
-            ID(std::array<uint8_t, kIDSize> data);
+            ID(std::bitset<kIDSize> data);
 
             ID(ID&&) = default;
             ID& operator=(ID&&) = default;

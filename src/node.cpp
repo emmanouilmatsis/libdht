@@ -3,11 +3,11 @@
 namespace libdht
 {
 
-    Node::Node()
+    Node::Node() : id_(), address_(kAddress), port_(kPort)
     {
     }
 
-    Node::Node(ID id) : id_(id)
+    Node::Node(ID id, std::string address, int port) : id_(id), address_(address), port_(port)
     {
     }
 
@@ -16,5 +16,14 @@ namespace libdht
         return id_;
     }
 
+    std::string Node::address() const
+    {
+        return address_;
+    }
+
+    int Node::port() const
+    {
+        return port_;
+    }
 
 }

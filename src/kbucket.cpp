@@ -3,24 +3,20 @@
 namespace libdht
 {
 
-    KBucket::KBucket()
+    KBucket::KBucket() // TODO
     {
-        std::array<uint8_t, libdht::kIDSize> min;
-        min.fill(0);
-
-        std::array<uint8_t, libdht::kIDSize> max;
-        max.fill(255);
-
-        range_ = std::make_pair(ID(min), ID(max));
+        // prefix default constructor all zero
+        // TODO: time_
     }
 
-    KBucket::KBucket(std::pair<ID, ID> range) : range_(range)
+    KBucket::KBucket(std::bitset<kIDSize> prefix) : prefix_(prefix) // TODO
     {
+        // TODO: time_
     }
 
-    std::pair<ID, ID> KBucket::range() const
+    std::bitset<kIDSize> KBucket::prefix() const
     {
-        return range_;
+        return prefix_;
     }
 
     std::list<Node>::iterator KBucket::begin()
@@ -89,8 +85,8 @@ namespace libdht
         {
             nodes_.splice(nodes_.cend(), nodes_,
                     std::find_if(nodes_.cbegin(), nodes_.cend(),
-                        [node=node](const Node &a) -> bool {
-                            return a.id() == node.id(); // TODO: compare address and port
+                        [b=node](const Node &a) -> bool { // TODO: compare address and port
+                            return a.id() == b.id();
                         })
                     );
         }
@@ -102,10 +98,11 @@ namespace libdht
         {
             return false;
         }
+
         return true;
     }
 
-    bool KBucket::remove(Node node)
+    bool KBucket::remove(Node node) // TODO
     {
         return true;
     }
@@ -118,8 +115,8 @@ namespace libdht
     bool KBucket::contains(Node node) const
     {
         return std::find_if(nodes_.cbegin(), nodes_.cend(),
-                [node=node](const Node &a) -> bool {
-                    return a.id() == node.id(); // TODO: compare address and port
+                [b=node](const Node &a) -> bool {
+                    return a.id() == b.id(); // TODO: compare address and port
                 }) != nodes_.cend();
     }
 
@@ -128,9 +125,9 @@ namespace libdht
         return nodes_.size() >= kK;
     }
 
-    bool KBucket::covers(Node node) const
+    bool KBucket::covers(Node node) const // TODO
     {
-        return range_.first <= node.id() && node.id() <= range_.second;
+        return true;
     }
 
     int KBucket::depth() const

@@ -15,7 +15,7 @@ namespace libdht
     {
         public:
             KBucket();
-            KBucket(std::pair<ID, ID> range);
+            KBucket(std::bitset<kIDSize> prefix);
 
             KBucket(KBucket&&) = default;
             KBucket& operator=(KBucket&&) = default;
@@ -23,7 +23,7 @@ namespace libdht
             KBucket& operator=(const KBucket&) = default;
             ~KBucket() = default;
 
-            std::pair<ID, ID> range() const;
+            std::bitset<kIDSize> prefix() const;
 
             std::list<Node>::iterator begin();
             std::list<Node>::const_iterator begin() const;
@@ -47,7 +47,7 @@ namespace libdht
             int depth() const;
 
         private:
-            std::pair<ID, ID> range_;
+            std::bitset<kIDSize> prefix_;
             std::chrono::time_point<std::chrono::steady_clock> time_;
             std::list<Node> nodes_;
             std::list<Node> cache_;

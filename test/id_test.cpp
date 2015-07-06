@@ -10,22 +10,16 @@ TEST(IDTestCase, DefaultConstructorTest)
 
 TEST(IDTestCase, StringConstructorTest)
 {
-    libdht::ID id("value");
+    libdht::ID id("value"); // f32b67c7e26342af42efabc674d441dca0a281c5
 
-    std::ostringstream os;
-    os << id;
-
-    EXPECT_EQ(os.str(), libdht::sha1("value"));
+    EXPECT_EQ(std::bitset<libdht::kIDSize>(std::string("1111001100101011011001111100011111100010011000110100001010101111010000101110111110101011110001100111010011010100010000011101110010100000101000101000000111000101")), id.data());
 }
 
 TEST(IDTestCase, DataConstructorTest)
 {
-    libdht::ID id(std::bitset<kIDSize>().flip());
+    libdht::ID id(std::bitset<libdht::kIDSize>().flip()); // ffffffffffffffffffffffffffffffffffffffff
 
-    std::ostringstream os;
-    os << id;
-
-    EXPECT_EQ(os.str(), "ffffffffffffffffffffffffffffffffffffffff");
+    EXPECT_EQ(std::bitset<libdht::kIDSize>(std::string("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")), id.data());
 }
 
 TEST(IDTestCase, PrefixTest)

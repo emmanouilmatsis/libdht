@@ -9,7 +9,7 @@ namespace libdht
         std::mt19937 gen(rd());
         std::bernoulli_distribution d;
 
-        for (int i = 0; i < kIDSize; i++)
+        for (int i = 0; i < data_.size(); i++)
             data_[i] = d(gen);
     }
 
@@ -19,11 +19,11 @@ namespace libdht
 
         std::bitset<4> nibble;
 
-        for (int i = 0; i < std::min(kIDSize, static_cast<int>(hash.size() * 4)); i++)
+        for (int i = 0; i < std::min(data_.size(), hash.size() * 4); i++)
         {
             if (!(i % 4))
             {
-                nibble = std::bitset<4>(std::stoul(std::string(hash.back()), nulptr, 16));
+                nibble = std::bitset<4>(std::stoul(std::string(1, hash.back()), nullptr, 16));
                 std::rotate(hash.rbegin(), hash.rbegin() + 1, hash.rend());
             }
 
@@ -35,7 +35,7 @@ namespace libdht
     {
     }
 
-    std::array<uint8_t, kIDSize> ID::data() const
+    std::bitset<kIDSize> ID::data() const
     {
         return data_;
     }
@@ -52,7 +52,7 @@ namespace libdht
 
     bool operator<(const ID& lhs, const ID& rhs)
     {
-        for (int i = kIDSize-1; i >= 0; i--)
+        for (int i = kIDSize - 1; i >= 0; i--)
         {
           if (lhs.data_.test(i) && !rhs.data_.test(i)) return false;
           if (!lhs.data_.test(i) && rhs.data_.test(i)) return true;
@@ -78,27 +78,22 @@ namespace libdht
 
     std::ostream& operator<<(std::ostream& os, const ID& obj)
     {
-        os << std::hex;
-        for (int i = kIDSize-1; i >= 0; i--)
-            os << std::setfill('0') << std::setw(2) << static_cast<int>(data_[i]);
-        os << std::dec;
-
-        return os;
+        return os << obj.data_;
     }
 
     int ID::prefix(const ID& obj) const
     {
         auto x = data_ ^ obj.data();
 
-        auto pos = 0;
+        auto i = 0;
 
-        while (!x.test(kIDSize - 1))
+        while (i < x.size() && !x.test(x.size() - 1))
         {
             x <<= 1;
-            ++pos;
+            ++i;
         }
 
-        return pos;
+        return i;
     }
 
 }
