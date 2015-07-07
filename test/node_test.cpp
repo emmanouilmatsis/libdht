@@ -5,8 +5,8 @@ TEST(NodeTestCase, DefaultConstructorTest)
 {
     libdht::Node node;
 
-    EXPECT_EQ("0.0.0.0", node.address());
-    EXPECT_EQ(1337, node.port());
+    EXPECT_EQ(libdht::kAddress, node.address());
+    EXPECT_EQ(libdht::kPort, node.port());
 }
 
 TEST(NodeTestCase, IDAddressPortConstructorTest)

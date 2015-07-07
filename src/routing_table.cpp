@@ -72,16 +72,6 @@ namespace libdht
         return kbuckets_.crend();
     }
 
-
-#ifndef EXCLUDE
-    bool RoutingTable::covers(std::list<KBucket>::iterator iter_kbucket)
-    {
-        return iter_kbucket->position <= node.id
-            && std::next(iter_kbucket)->position > node.id
-            || std::next(iter_kbucket) == kbuckets_.end();
-    }
-#endif
-
     bool RoutingTable::add_contact(Node node) // TODO
     {
         auto iter_kbucket = std::find_if(kbuckets_.begin(), kbuckets_.end(),

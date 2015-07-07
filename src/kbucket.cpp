@@ -125,16 +125,9 @@ namespace libdht
         return nodes_.size() >= kK;
     }
 
-    int KBucket::depth() const // TODO: make sure that it is correct
+    int KBucket::depth() const
     {
-        if (nodes_.empty()) return 0;
-
-        int depth = kK * 8;
-
-        for (auto it = nodes_.begin(); std::next(it) != nodes_.cend(); it++)
-            depth = std::min(depth, it->id().prefix(std::next(it)->id()));
-
-        return depth;
+        return position_.size();
     }
 
 }
