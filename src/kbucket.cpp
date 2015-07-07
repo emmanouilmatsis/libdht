@@ -7,13 +7,13 @@ namespace libdht
     {
     }
 
-    KBucket::KBucket(std::bitset<kIDSize> prefix) : prefix_(prefix), time_(std::chrono::steady_clock::now())
+    KBucket::KBucket(std::vector<bool> position) : position_(position), time_(std::chrono::steady_clock::now())
     {
     }
 
-    std::bitset<kIDSize> KBucket::prefix() const
+    std::vector<bool> KBucket::position() const
     {
-        return prefix_;
+        return position_;
     }
 
     std::list<Node>::iterator KBucket::begin()
@@ -99,16 +99,6 @@ namespace libdht
         return true;
     }
 
-    bool KBucket::remove(Node node) // TODO
-    {
-        return true;
-    }
-
-    Node KBucket::random() const
-    {
-        return Node();
-    }
-
     bool KBucket::contains(Node node) const
     {
         return std::find_if(nodes_.cbegin(), nodes_.cend(),
@@ -117,12 +107,25 @@ namespace libdht
                 }) != nodes_.cend();
     }
 
+    bool KBucket::covers(Node node) const
+    {
+        auto data = node.id().data();
+
+        for (int i = 0; i < position_.size(); i++)
+        {
+            if (position_[i] != data[data.size() - 1 - i])
+                return false;
+        }
+
+        return true;
+    }
+
     bool KBucket::full() const
     {
         return nodes_.size() >= kK;
     }
 
-    int KBucket::depth() const
+    int KBucket::depth() const // TODO: make sure that it is correct
     {
         if (nodes_.empty()) return 0;
 

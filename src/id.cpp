@@ -52,7 +52,7 @@ namespace libdht
 
     bool operator<(const ID& lhs, const ID& rhs)
     {
-        for (int i = kIDSize - 1; i >= 0; i--)
+        for (int i = lhs.data_.size() - 1; i >= 0; i--)
         {
           if (lhs.data_.test(i) && !rhs.data_.test(i)) return false;
           if (!lhs.data_.test(i) && rhs.data_.test(i)) return true;

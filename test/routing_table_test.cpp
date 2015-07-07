@@ -8,7 +8,7 @@ TEST(RoutingTableTestCase, DefaultConstructorTest)
     auto routing_table = libdht::RoutingTable();
     auto kbucket = *routing_table.begin();
 
-    EXPECT_TRUE(kbucket.prefix().none());
+    EXPECT_EQ(0, kbucket.position().size());
 }
 
 TEST(RoutingTableTestCase, AddContactTest)

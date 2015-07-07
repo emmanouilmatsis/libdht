@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#define EXCLUDE
+
 namespace libdht
 {
 
@@ -71,12 +73,14 @@ namespace libdht
     }
 
 
+#ifndef EXCLUDE
     bool RoutingTable::covers(std::list<KBucket>::iterator iter_kbucket)
     {
-        return iter_kbucket->prefix <= node.id
-            && std::next(iter_kbucket)->prefix > node.id
+        return iter_kbucket->position <= node.id
+            && std::next(iter_kbucket)->position > node.id
             || std::next(iter_kbucket) == kbuckets_.end();
     }
+#endif
 
     bool RoutingTable::add_contact(Node node) // TODO
     {
@@ -104,7 +108,7 @@ namespace libdht
 
     void RoutingTable::split(std::list<KBucket>::iterator iter_old_kbucket) // TODO
     {
-#define EXCLUDE
+
 #ifndef EXCLUDE
         auto old_range = iter_old_kbucket->range();
         auto old_min = old_range.first;

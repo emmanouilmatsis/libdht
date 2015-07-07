@@ -15,7 +15,7 @@ namespace libdht
     {
         public:
             KBucket();
-            KBucket(std::bitset<kIDSize> prefix);
+            KBucket(std::vector<bool> position);
 
             KBucket(KBucket&&) = default;
             KBucket& operator=(KBucket&&) = default;
@@ -23,7 +23,7 @@ namespace libdht
             KBucket& operator=(const KBucket&) = default;
             ~KBucket() = default;
 
-            std::bitset<kIDSize> prefix() const;
+            std::vector<bool> position() const;
 
             std::list<Node>::iterator begin();
             std::list<Node>::const_iterator begin() const;
@@ -39,14 +39,13 @@ namespace libdht
             std::list<Node>::const_reverse_iterator crend() const;
 
             bool add(Node);
-            bool remove(Node);
-            Node random() const;
             bool contains(Node) const;
+            bool covers(Node) const;
             bool full() const;
             int depth() const;
 
         private:
-            std::bitset<kIDSize> prefix_;
+            std::vector<bool> position_;
             std::chrono::time_point<std::chrono::steady_clock> time_;
             std::list<Node> nodes_;
             std::list<Node> cache_;

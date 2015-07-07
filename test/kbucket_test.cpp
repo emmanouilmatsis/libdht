@@ -3,19 +3,20 @@
 
 TEST(KBucketTestCase, DefaultConstructorTest)
 {
+    std::vector<bool> position;
+
     libdht::KBucket kbucket;
 
-    EXPECT_TRUE(kbucket.prefix().none());
+    EXPECT_EQ(position, kbucket.position());
 }
 
-TEST(KBucketTestCase, RangeConstructorTest)
+TEST(KBucketTestCase, PositionConstructorTest)
 {
-    std::bitset<libdht::kIDSize> prefix;
-    prefix.flip();
+    std::vector<bool> position(1, 1);
 
-    libdht::KBucket kbucket(prefix);
+    libdht::KBucket kbucket(position);
 
-    EXPECT_TRUE(kbucket.prefix().all());
+    EXPECT_EQ(position, kbucket.position());
 }
 
 TEST(KBucketTestCase, AddTest)
@@ -52,13 +53,13 @@ TEST(KBucketTestCase, FullTest)
 
 TEST(KBucketTestCase, CoversTest)
 {
-    libdht::Node node;
+    libdht::Node node(libdht::ID().data().reset(libdht::kIDSize - 1), "", 0);
 
     libdht::KBucket kbucket_a;
 
     EXPECT_TRUE(kbucket_a.covers(node));
 
-    libdht::KBucket kbucket_b(std::bitset<libdht::kIDSize>().flip());
+    libdht::KBucket kbucket_b(std::vector<bool>(1, 1));
 
     EXPECT_FALSE(kbucket_b.covers(node));
 }
