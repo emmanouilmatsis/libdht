@@ -53,7 +53,8 @@ TEST(KBucketTestCase, FullTest)
 
 TEST(KBucketTestCase, CoversTest)
 {
-    libdht::Node node(libdht::ID().data().reset(libdht::kIDSize - 1), "", 0);
+    auto data = libdht::ID().data().reset(libdht::kIDSize - 1);
+    libdht::Node node(libdht::ID(data), "", 0);
 
     libdht::KBucket kbucket_a;
 
@@ -66,13 +67,6 @@ TEST(KBucketTestCase, CoversTest)
 
 TEST(KBucketTestCase, DepthTest)
 {
-    libdht::KBucket kbucket;
-
-    for (auto i = 0; i < libdht::kK; i++)
-    {
-        auto data = libdht::ID().data().reset(libdht::kIDSize - 1);
-        kbucket.add(libdht::Node(libdht::ID(data), "", 0));
-    }
-
-    EXPECT_GE(kbucket.depth(), 1);
+    EXPECT_GE(libdht::KBucket().depth(), 0);
+    EXPECT_GE(libdht::KBucket(std::vector<bool>(1, 0)).depth(), 1);
 }

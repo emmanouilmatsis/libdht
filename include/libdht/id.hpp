@@ -36,8 +36,6 @@ namespace libdht
             friend bool operator>=(const ID& lhs, const ID& rhs);
             friend std::ostream& operator<<(std::ostream&, const ID&);
 
-            int prefix(const ID&) const;
-
         private:
             std::bitset<kIDSize> data_;
     };

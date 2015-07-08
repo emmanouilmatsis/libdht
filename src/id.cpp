@@ -81,19 +81,4 @@ namespace libdht
         return os << obj.data_;
     }
 
-    int ID::prefix(const ID& obj) const
-    {
-        auto x = data_ ^ obj.data();
-
-        auto i = 0;
-
-        while (i < x.size() && !x.test(x.size() - 1))
-        {
-            x <<= 1;
-            ++i;
-        }
-
-        return i;
-    }
-
 }
