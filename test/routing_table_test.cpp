@@ -17,11 +17,10 @@ TEST(RoutingTableTestCase, AddContactTest)
 
     EXPECT_EQ(1, std::distance(routing_table.begin(), routing_table.end()));
 
-    for (int i = 0; i <= libdht::kK; i++)
-    {
-        std::bitset<libdht::kIDSize> data(i);
-        routing_table.add_contact(libdht::Node(libdht::ID(data), "", 0));
-    }
+    for (int i = 0; i < libdht::kK; i++)
+        routing_table.add_contact(libdht::Node(libdht::ID(std::bitset<libdht::kIDSize>(i)), "", 0));
+
+    EXPECT_FALSE(routing_table.add_contact(libdht::Node(libdht::ID(std::bitset<libdht::kIDSize>(libdht::kK)), "", 0)));
 
     EXPECT_GE(std::distance(routing_table.begin(), routing_table.end()), 6);
 }
